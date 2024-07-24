@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      crossorigin="anonymous"
+    />
+    <style>
+      .custom-textarea {
+        background-color: #fffacd;
+        border-radius: 15px;
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+      .custom-textarea::placeholder {
+        color: #888;
+      }
+      .custom-textarea:focus {
+        background-color: #fffacd;
+        border-color: #b3b3b3;
+        outline: none;
+      }
+      .custom-note {
+        background-color: #fffacd;
+        border-radius: 15px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        padding: 10px;
+        height: 220px;
+        word-wrap: break-word;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 7px 8px rgba(0, 0, 0, 0.1);
+      }
+      .custom-note .card-body {
+        padding-top: 10px;
+        padding-left: 8px;
+      }
+      .custom-note .badge {
+        margin-bottom: 5px;
+      }
+      .custom-note .card-title {
+        margin-top: 5px;
+        font-size: 1.2rem;
+      }
+      .custom-note .card-text {
+        font-size: 0.9rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* number of lines to show */
+        -webkit-box-orient: vertical;
+      }
+      .custom-note .action-icons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+      }
+      .custom-note .action-icons a {
+        margin-left: 5px;
+        color: #000;
+      }
+      .btn-add-note {
+        background: linear-gradient(264deg, #df8908 -5.09%, #b415ff 89.28%);
+        border-radius: 50px;
+        border: none;
+      }
+      .btn-add-note:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+      }
+      .btn-rounded {
+        border-radius: 50px;
+        background: linear-gradient(264deg, #df8908 -5.09%, #b415ff 106.28%);
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+      }
+      .btn-rounded:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+      }
+      .nav-tabs .nav-link {
+        color: #606060;
+      }
+      .mb-3 {
+        margin-bottom: 1rem !important;
+      }
+      .pointer {
+        cursor: pointer;
+      }
+      @media (max-width: 760px) {
+        .custom-note {
+          flex: 0 0 100%;
+          max-width: 100%;
+          margin: 1%;
+        }
+        .custom-note .card-body {
+          padding-top: 15px;
+        }
+        .custom-note .card-text {
+          font-size: 0.85rem;
+        }
+      }
+    </style>
+
+    <title>{% block title %}Home{% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav mr-auto">
+          {% if user.is_authenticated %}
+          <a class="nav-item nav-link" id="home" href="/">Home</a>
+          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+          {% else %}
+          <a class="nav-item nav-link" id="login" href="/login">Login</a>
+          <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %} {% if category ==
+    'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+    <div class="container">{% block content %} {% endblock %}</div>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    {% block javascript %}
+    <script type="text/javascript">
+      function deleteNote(noteId) {
+        fetch("/delete-note", {
+          method: "POST",
+          body: JSON.stringify({ noteId: noteId }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((_res) => {
+          window.location.href = "/";
+        });
+      }
+    </script>
+    {% endblock %}
+  </body>
+</html>
