@@ -1,6 +1,6 @@
 **Flask Web Note-Taking App**: 
 A simple, user-friendly web application for taking and managing notes, built with Flask, Postgresql, and Bootstrap.
-![image](https://github.com/user-attachments/assets/a5a9dc39-876d-44bd-80eb-415e93491e3f)
+![image](https://github.com/user-attachments/assets/1caf5628-fd0e-4b3c-891e-2c6fb5df3b09)
 
 Project: https://flask-note-whole.onrender.com
 
