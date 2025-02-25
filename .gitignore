@@ -3,3 +3,4 @@
 website/__pycache__
 instance/database.db
 .DS_Store
+venv/
