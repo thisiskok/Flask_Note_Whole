@@ -3,6 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 from flask_migrate import Migrate
+import os
+from dotenv import load_dotenv
+
+# 加载.env文件
+load_dotenv()
 
 #Initialize Extensions and Constants
 db = SQLAlchemy()
@@ -13,7 +18,17 @@ DB_NAME = "database.db"
 def create_app(): #create a fully configured Flask
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs' #Security key for sessions and cookies
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}' #Database URI for SQLAlchemy using SQLite database specified by DB_NAME
+    
+    # 获取数据库URL并处理postgres://前缀
+    DATABASE_URL = os.environ.get('DATABASE_URL', f'sqlite:///{DB_NAME}')
+    print("Using database:", DATABASE_URL)  # 添加这行来显示实际使用的数据库
+    
+    if DATABASE_URL.startswith('postgres://'):
+        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
     db.init_app(app) #binds the database instance to the Flask app
 
     migrate.init_app(app, db)
