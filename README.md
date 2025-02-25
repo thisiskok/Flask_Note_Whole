@@ -1,51 +1,27 @@
-# Flask Web App Tutorial
+**Flask Web Note-Taking App**: 
+A simple, user-friendly web application for taking and managing notes, built with Flask, Postgresql, and Bootstrap.
+![image](https://github.com/user-attachments/assets/a5a9dc39-876d-44bd-80eb-415e93491e3f)
 
-This project is a Flask web application that demonstrates how to set up and run a Flask app locally. Follow the instructions below to get started.
+Project: https://flask-note-whole.onrender.com
 
-## Requirements
+**🌟 Features**
 
-Before running the application, ensure you have the following installed:
+📝 User Authentication: Secure sign-up, login, and logout functionality.
 
-- Python 3.x
-- `pip` (Python package installer)
+📄 Note Management: Create, edit, delete, and view notes.
 
-## Setup and Running the Application
+🔒 Authorization: Users can only access their own notes.
 
-### 1. Create a Virtual Environment
+🔍 Search Functionality: Quickly find notes by keywords.
 
-First, create a virtual environment to manage dependencies:
+📅 Timestamps: Notes include creation and last modified dates.
 
-```bash
-python3 -m venv venv
-```
+**🛠️ Tech Stack**
 
-### 2. Activate the Virtual Environment
+Backend: Flask (Python)
 
-Activate the virtual environment:
+Frontend: HTML, CSS (Bootstrap)
 
-On Windows:
+Database: PostgreSQL
 
-```bash
-venv\Scripts\activate
-```
-
-On macOS/Linux:
-
-```bash
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-
-Install the required dependencies listed in `requirements.txt`:
-
-```bash
-cd python_flaskNoteApp
-pip install -r requirements.txt
-```
-
-### 4. Run the Flask Application
-
-```bash
-python main.py
-```
+Authentication: Flask-Login, Flask-WTF
