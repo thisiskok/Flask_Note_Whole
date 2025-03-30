@@ -1,14 +1,14 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
-<h1 align="center">Notes</h1>
+<h1 align="center">Notes</h1> <!--central-->
 
 <!-- TAG NAV BAR-->
 <div class="container mt-3">
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs"> <!--defines an unordered (bulleted) list-->
     <li class="nav-item">
-      <a class="nav-link active" href="#" onclick="filterNotes('all')">All</a>
+      <a class="nav-link active" href="#" onclick="filterNotes('all')">All</a> <!--defines a hyperlink-->
     </li>
-    {% for tag in tags %}
+    {% for tag in tags %} <!--retriver tags and generate nav items corresponding to each tag-->
     <li class="nav-item">
       <a class="nav-link" href="#" onclick="filterNotes('{{ tag }}')">{{ tag }}</a>
     </li>
@@ -18,9 +18,9 @@
 
 <!-- notes list-->
 <div class="container mt-3">
-  <div class="row" id="notes-container">
+  <div class="row" id="notes-container"> <!--row used to hold column elements, add if for elements-->
     {% for note in user.notes %}
-    <div class="col-md-4 col-sm-6 mb-4 note-card" data-tag="{{ note.tag }}">
+    <div class="col-md-4 col-sm-6 mb-4 note-card" data-tag="{{ note.tag }}"><!--mediumdevice 3（1/3width） col, smalldevice 2（1/2width） col-->
       <div class="card custom-note">
         <div class="action-icons">
           <a href="#" onClick="showEditForm('{{ note.id }}', '{{ note.title }}', '{{ note.description }}', '{{ note.tag }}')">
@@ -39,8 +39,9 @@
           <span
             class="badge badge-pill custom-badge"
             style="background-color: {{ note.tag_color }}; "
-            >{{ note.tag }}</span
-          >
+            >{{ note.tag }}</span 
+          > <!--tag appearance-->
+
           <h5 class="card-title">{{note.title}}</h5>
           <p class="card-text">
             <span class="short-text" id="short-{{ note.id }}">{{ note.description[:60] }}{% if note.description|length > 60 %}... <a href="#" onclick="showFullText('{{ note.id }}')">[more...]</a>{% endif %}</span>
@@ -53,14 +54,14 @@
   </div>
 
   <!--add note button -->
-  <div class="text-center mb-4">
+  <div class="text-center mb-4"> <!--text-center make btn in the middle-->
     <button id="add-note-btn" class="btn btn-success mb-3 btn-add-note" onclick="showAddForm()">Add Note</button>
   </div>
 
   <!--add note form -->
-    <div id="noteForm" style="display: none;">
+    <div id="noteForm" style="display: none;"> <!--Hide the form in the initial state through css -->
       <form method="POST" action="/">
-        <div class="form-group">
+        <div class="form-group"><!--title input box-->
           <input
             type="text"
             name="title"
@@ -69,7 +70,7 @@
             required
           />
         </div>
-        <div class="form-group">
+        <div class="form-group"><!--description box-->
           <textarea
             name="description"
             class="form-control custom-textarea mb-3"
@@ -78,15 +79,15 @@
             required
           ></textarea>
         </div>
-        <div class="form-group">
+        <div class="form-group"><!--tag box-->
           <input
             type="text"
             name="tag"
             class="form-control custom-textarea mb-3"
             placeholder="Tag"
-            list="tag-list"
+            list="tag-list" 
           />
-          <datalist id="tag-list">
+          <datalist id="tag-list"><!--define list of option-->
             {% for tag in tags %}
             <option value="{{tag}}">{{tag}}</option>
             {% endfor %}
@@ -152,9 +153,9 @@
   {% endblock %} {% block javascript %}
   <script>
     function showAddForm() {
-      var addForm = document.getElementById("noteForm");
-      var editForm = document.getElementById("editForm");
-      var addNoteBtn = document.getElementById("add-note-btn");
+      const addForm = document.getElementById("noteForm"); //Get the DOM element with ID noteForm and assign it to the constant addForm
+      const editForm = document.getElementById("editForm"); //get the dom element with id editform and assign it to the constant editform
+      const addNoteBtn = document.getElementById("add-note-btn"); //get the dom element with id addnotebtm and assign it to the constant addnotebtn
 
       addForm.style.display = "block";
       editForm.style.display = "none";
@@ -162,10 +163,11 @@
     }
 
     function showEditForm(id, title, description, tag) {
-      var addForm = document.getElementById("noteForm");
-      var editForm = document.getElementById("editForm");
-      var addNoteBtn = document.getElementById("add-note-btn");
+      const addForm = document.getElementById("noteForm");
+      const editForm = document.getElementById("editForm");
+      const addNoteBtn = document.getElementById("add-note-btn");
 
+      //assign the parameter values ​​passed to the function to the corresponding input fields in the edit form
       document.getElementById("edit-note-id").value = id;
       document.getElementById("edit-note-title").value = title;
       document.getElementById("edit-note-description").value = description;
@@ -177,9 +179,9 @@
     }
 
     function hideForms() {
-      var addForm = document.getElementById("noteForm");
-      var editForm = document.getElementById("editForm");
-      var addNoteBtn = document.getElementById("add-note-btn");
+      const addForm = document.getElementById("noteForm");
+      const editForm = document.getElementById("editForm");
+      const addNoteBtn = document.getElementById("add-note-btn");
 
       addForm.style.display = "none";
       editForm.style.display = "none";
@@ -187,13 +189,13 @@
     }
 
     function deleteNote(noteId) {
-      fetch("/delete-note", {
+      fetch("/delete-note", { //fetch function sends an HTTP request to the /delete-note endpoint
         method: "POST",
         body: JSON.stringify({ noteId: noteId }),
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", //tell the server that the data sent is in JSON format
         },
-      }).then((_res) => {
+      }).then((_res) => { //when the request is successful, execute the function in then and refresh the current page
         window.location.href = "/";
       });
     }
@@ -209,9 +211,9 @@
     }
 
     function filterNotes(tag) {
-      var notes = document.getElementsByClassName('note-card');
-      for (var i = 0; i < notes.length; i++) {
-        if (notes[i].getAttribute('data-tag') === tag || tag === 'all') {
+      const notes = document.getElementsByClassName('note-card');
+      for (let i = 0; i < notes.length; i++) {
+        if (notes[i].getAttribute('data-tag') === tag || tag === 'all') { //||=or
           notes[i].style.display = 'block';
         } else {
           notes[i].style.display = 'none';
@@ -219,11 +221,12 @@
       }
     }
 
+    //ensure that all DOM elements have been parsed and can be accessed and manipulated by JavaScript
     document.addEventListener('DOMContentLoaded', function () {
-      var filterLinks = document.querySelectorAll('.nav-link');
-      filterLinks.forEach(function (link) {
+      const filterLinks = document.querySelectorAll('.nav-link'); //returns all elements matching the specified CSS selector. These elements are returned as NodeList objects
+      filterLinks.forEach(function (link) { //add a click event listener to each nav-link
         link.addEventListener('click', function() {
-          var tag = this.textContent.trim();
+          const tag = this.textContent.trim(); //get the text content of the clicked nav-link element, remove the leading and trailing whitespace characters, and then assign it to the tag variable
           filterNotes(tag);
           filterLinks.forEach(function(link) {
             link.classList.remove('active');

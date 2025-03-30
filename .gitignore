@@ -2,3 +2,11 @@
 website/__pycache__
 instance/database.db
 .DS_Store
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.db
+newenv/
