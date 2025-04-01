@@ -20,3 +20,11 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     notes = db.relationship('Note') #one user can owns n notes
+
+class SharedPermission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    note_id = db.Column(db.Integer, db.ForeignKey('note.id'))
+    email = db.Column(db.String(150))
+    can_edit = db.Column(db.Boolean, default=False)
+
+    note = db.relationship('Note', backref='shared_permissions')

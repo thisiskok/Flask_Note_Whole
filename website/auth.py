@@ -3,6 +3,7 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
+from .utils import send_email
 
 
 auth = Blueprint('auth', __name__)
@@ -59,8 +60,17 @@ def sign_up():
                 password1, method='pbkdf2:sha256'))
             db.session.add(new_user)
             db.session.commit()
+
+             # send email after registration
+            send_email(
+                to=email,
+                subject="Welcome to NoteApp! 🎉",
+                body=f"Hi {first_name},\n\nThanks for signing up. You can now create and share notes!"
+            )
+
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
+
 
     return render_template("sign_up.html", user=current_user)

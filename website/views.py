@@ -3,6 +3,8 @@ from flask_login import login_required, current_user# #login_required: Ensures a
 from .models import Note
 from . import db
 import json
+from .models import SharedPermission
+from .utils import send_email
 
 views = Blueprint('views', __name__)##new blueprint allow u to organize routes separately from the main app
 
@@ -23,8 +25,6 @@ def home():
 
         if not title or not description:
             flash('Title and description are required!', category='error')
-        #if len(note) < 1:
-            #flash('Note is too short!', category='error') 
         else:
             new_note = Note(title=title,
                 description=description,
@@ -36,14 +36,33 @@ def home():
             flash('Note added!', category='success')
 
 
-     # Retrieve all notes for the current user
-    notes = Note.query.filter_by(user_id=current_user.id).all() #Note is a SQLAlchemy model represents the notes table in the database，all matches record
+    # 自己的笔记
+    notes = Note.query.filter_by(user_id=current_user.id).all()
+    for note in notes:
+        note.is_owner = True
+        note.can_edit = True
+        note.can_delete = True
 
-    # Retrieve distinct tags for the current user
-    tags = db.session.query(Note.tag).filter_by(user_id=current_user.id).distinct().all() #filter_by =filter(Note.user_id == current_user.id).
-    tags = [tag[0] for tag in tags] #tag[0] extracts the first (and only) element of each tuple
+    # 别人分享给我的
+    shared_note_ids = db.session.query(SharedPermission.note_id).filter_by(email=current_user.email).all()
+    shared_note_ids = [note_id for (note_id,) in shared_note_ids]
+    shared_permissions = SharedPermission.query.filter(SharedPermission.note_id.in_(shared_note_ids), SharedPermission.email == current_user.email).all()
+    shared_notes = []
+    for perm in shared_permissions:
+        note = Note.query.get(perm.note_id)
+        if note:
+            note.is_owner = False
+            note.can_edit = perm.can_edit
+            note.can_delete = False  # 无论如何不能删除
+            shared_notes.append(note)
 
-    return render_template("home.html", user=current_user, notes=notes, tags=tags)
+    all_notes = notes + shared_notes
+
+    tags = db.session.query(Note.tag).filter_by(user_id=current_user.id).distinct().all()
+    tags = [tag[0] for tag in tags]
+
+    return render_template("home.html", user=current_user, notes=all_notes, tags=tags)
+
 
 @views.route('/edit-note', methods=['POST'])
 @login_required
@@ -53,7 +72,21 @@ def edit_note():
     description = request.form.get('description')
     tag = request.form.get('tag')
     note = Note.query.get(note_id) #need note_id to find the newest record in the database
-    if note and note.user_id == current_user.id:
+    
+    # ✅ 如果没有这个笔记
+    if not note:
+        flash('Note not found', category='error')
+        return redirect(url_for('views.home'))
+
+    # ✅ 检查是否是作者 or 被授权编辑
+    is_owner = note.user_id == current_user.id
+    has_shared_edit = SharedPermission.query.filter_by(
+        note_id=note.id,
+        email=current_user.email,
+        can_edit=True
+    ).first() is not None
+
+    if is_owner or has_shared_edit:
         note.title = title
         note.description = description
         note.tag = tag
@@ -61,11 +94,46 @@ def edit_note():
         flash('Note updated!', category='success')
     else:
         flash('Note not found or unauthorized', category='error')
+
+
     return redirect(url_for('views.home'))
+
+@views.route('/share-note/<int:note_id>', methods=['POST'])
+@login_required
+def share_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if note.user_id != current_user.id:
+        return "Unauthorized", 403
+
+    email = request.form.get('shared_email')
+    permission = request.form.get('permission_level')
+    can_edit = (permission == 'edit')
+
+    existing_perm = SharedPermission.query.filter_by(note_id=note.id, email=email).first()
+    if existing_perm:
+        existing_perm.can_edit = can_edit
+    else:
+        new_perm = SharedPermission(note_id=note.id, email=email, can_edit=can_edit)
+        db.session.add(new_perm)
+
+    db.session.commit()
+
+    # send share email
+    send_email(
+        to=email,
+        subject=f"You've been shared a note: {note.title}",
+        body=f"Hi,\n\n{current_user.first_name} shared a note with you.\n\nTitle: {note.title}\n\nYou can now view it in your dashboard."
+    )
+
+    flash(f"Shared with {email}!", category='success')
+    return redirect(url_for('views.home'))
+
+
 
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():  
+    print("received request, headers:", request.headers)
     note = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
     noteId = note['noteId']
     note = Note.query.get(noteId)
@@ -75,3 +143,4 @@ def delete_note():
             db.session.commit()
 
     return jsonify({})#empty json response to tell the html this is completed
+

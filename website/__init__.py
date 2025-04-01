@@ -5,13 +5,19 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
+from flask_mailman import Mail
+from flask_wtf import CSRFProtect
+from flask_talisman import Talisman
+
 
 # 加载.env文件
 load_dotenv()
 
 #Initialize Extensions and Constants
+csrf = CSRFProtect()
 db = SQLAlchemy()
 migrate = Migrate()
+mail = Mail()
 DB_NAME = "database.db"
 
 #create_app function
@@ -28,10 +34,21 @@ def create_app(): #create a fully configured Flask
     
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    db.init_app(app) #binds the database instance to the Flask app
 
+    # 邮件配置
+    app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.sendgrid.net')
+    app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
+    app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'True') == 'True'
+    app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'apikey')
+    app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+    app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', 'yongjiehao18@outlook.com')
+
+    
+    # 初始化扩展
+    db.init_app(app) #binds the database instance to the Flask app
     migrate.init_app(app, db)
+    csrf.init_app(app)
+    mail.init_app(app)
 
     from .views import views
     from .auth import auth
@@ -54,6 +71,9 @@ def create_app(): #create a fully configured Flask
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+    
+    Talisman(app, content_security_policy=None)
+
 
     return app
 
