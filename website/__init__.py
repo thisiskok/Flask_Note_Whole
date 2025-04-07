@@ -83,4 +83,3 @@ def create_database(app): #access the app's context and database configuration
         with app.app_context(): #If it does not exist, it creates the database and its tables within an application context
             db.create_all()
         print('Created Database!')
-

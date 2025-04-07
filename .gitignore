@@ -11,3 +11,21 @@ __pycache__/
 .Python
 *.db
 newenv/
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+venv/
+newenv/
+ENV/
+.vscode/
+.idea/
+.DS_Store
+instance/database.db
+.env

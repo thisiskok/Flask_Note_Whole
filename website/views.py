@@ -143,4 +143,3 @@ def delete_note():
             db.session.commit()
 
     return jsonify({})#empty json response to tell the html this is completed
-

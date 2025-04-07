@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890",
+		"name": "NoteApp API",
+		"description": "Collection for testing NoteApp API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Get CSRF Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract CSRF token from the response",
+									"const $ = cheerio.load(pm.response.text());",
+									"const csrfToken = $('meta[name=\"csrf-token\"]').attr('content');",
+									"",
+									"// Save the CSRF token to environment variable",
+									"if (csrfToken) {",
+									"    pm.environment.set('csrf_token', csrfToken);",
+									"    console.log('CSRF Token saved:', csrfToken);",
+									"} else {",
+									"    console.error('CSRF Token not found in the response');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/sign-up",
+							"host": ["{{base_url}}"],
+							"path": ["sign-up"]
+						},
+						"description": "Get CSRF token from signup page"
+					}
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "test@example.com"
+								},
+								{
+									"key": "firstName",
+									"value": "Test User"
+								},
+								{
+									"key": "password1",
+									"value": "test123"
+								},
+								{
+									"key": "password2",
+									"value": "test123"
+								},
+								{
+									"key": "csrf_token",
+									"value": "{{csrf_token}}"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/sign-up",
+							"host": ["{{base_url}}"],
+							"path": ["sign-up"]
+						},
+						"description": "Register a new user"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf_token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "test@example.com"
+								},
+								{
+									"key": "password",
+									"value": "test123"
+								},
+								{
+									"key": "csrf_token",
+									"value": "{{csrf_token}}"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": ["{{base_url}}"],
+							"path": ["login"]
+						},
+						"description": "Login with user credentials"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Notes",
+			"item": [
+				{
+					"name": "Create Note",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Test Note\",\n    \"description\": \"This is a test note\",\n    \"tag\": \"test\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/notes",
+							"host": ["{{base_url}}"],
+							"path": ["notes"]
+						},
+						"description": "Create a new note"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response has note data\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.title).to.eql(\"Test Note\");",
+									"    pm.expect(jsonData.description).to.eql(\"This is a test note\");",
+									"    pm.expect(jsonData.tag).to.eql(\"test\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Share Note",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"note_id\": \"1\",\n    \"shared_email\": \"shared@example.com\",\n    \"permission\": \"edit\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/share",
+							"host": ["{{base_url}}"],
+							"path": ["share"]
+						},
+						"description": "Share a note with another user"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"Note shared successfully!\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:5000",
+			"type": "string"
+		}
+	]
+} 

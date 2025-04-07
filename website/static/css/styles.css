@@ -1,0 +1,494 @@
+.custom-note {
+  background-color: #fffacd;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 10px;
+  height: 220px;
+  word-wrap: break-word;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 7px 8px rgba(0, 0, 0, 0.1);
+}
+
+.icon-lg {
+  width: 24px;
+  height: 24px;
+  color: #6c757d;
+  transition: color 0.2s;
+}
+
+.icon-lg:hover {
+  color: #343a40;
+}
+
+.action-icons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+  z-index: 1;
+}
+
+.custom-note .action-icons a {
+  margin-bottom: 5px;
+  color: #000;
+}
+
+.custom-note .action-icons svg {
+  width: 24px;
+  height: 24px;
+}
+
+.custom-textarea {
+  background-color: #fffacd;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  resize: none;
+}
+
+.custom-textarea::placeholder {
+  color: #888;
+}
+
+.custom-textarea:focus {
+  background-color: #fffacd;
+  border-color: #b3b3b3;
+  outline: none;
+}
+
+.custom-note .card-body {
+  padding-top: 10px;
+  padding-left: 8px;
+}
+
+.custom-note .badge {
+  margin-bottom: 5px;
+}
+
+.custom-note .card-title {
+  margin-top: 5px;
+  font-size: 1.2rem;
+}
+
+.custom-note .card-text {
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.btn-add-note {
+  background: linear-gradient(264deg, #df8908 -5.09%, #b415ff 89.28%);
+  border-radius: 50px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.btn-add-note:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  color: white;
+  text-decoration: none;
+}
+
+.btn-add-note:active {
+  transform: scale(1);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-rounded {
+  border-radius: 50px;
+  background: linear-gradient(264deg, #df8908 -5.09%, #b415ff 106.28%);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-rounded:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-tabs .nav-link {
+  color: #606060;
+  transition: color 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  color: #000;
+}
+
+.nav-tabs .nav-link.active {
+  color: #000;
+  font-weight: 500;
+}
+
+.custom-badge {
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.share-modal {
+  display: none;
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fffacd;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  width: 240px;
+  max-height: 220px;
+}
+
+.share-modal input,
+.share-modal select {
+  margin-bottom: 8px;
+  padding: 6px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.share-modal label {
+  font-weight: 500;
+  margin-bottom: 2px;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.share-modal .btn {
+  margin-right: 10px;
+  margin-top: 0;
+}
+
+.share-modal .btn-primary,
+.share-modal .btn-secondary {
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.share-modal .btn-primary {
+  background: linear-gradient(264deg, #df8908 -5.09%, #b415ff 106.28%);
+  color: white;
+  border: none;
+}
+
+.share-modal .btn-secondary {
+  background: #e9ecef;
+  color: #333;
+  border: none;
+}
+
+.share-modal .btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.share-modal .btn-secondary:hover {
+  background: #dee2e6;
+  transform: scale(1.05);
+}
+
+/* 导航栏登录按钮样式 */
+.nav-login-btn {
+  background: linear-gradient(264deg, #df8908 -5.09%, #b415ff 106.28%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.nav-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(180, 21, 255, 0.2);
+  color: white;
+  text-decoration: none;
+}
+
+.nav-login-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+  color: white;
+}
+
+/* 登录和注册页面样式 */
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fffacd;
+  border-radius: 15px;
+  box-shadow: 0 7px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.auth-form input:focus {
+  border-color: #b415ff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(180, 21, 255, 0.1);
+}
+
+.auth-form .btn-submit {
+  background: linear-gradient(264deg, #df8908 -5.09%, #b415ff 89.28%);
+  border-radius: 50px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  color: white;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.auth-form .btn-submit:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  color: white;
+  text-decoration: none;
+}
+
+.auth-form .btn-submit:active {
+  transform: scale(1);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form .btn-submit:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.auth-links {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.auth-links a {
+  color: #b415ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.auth-links a:hover {
+  color: #df8908;
+}
+
+/* Flash 消息样式 */
+.alert {
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: none;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* 响应式布局优化 */
+@media (max-width: 1200px) {
+  .custom-note {
+    height: 240px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .custom-note {
+    height: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-note {
+    height: auto;
+    min-height: 200px;
+  }
+
+  .auth-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .btn-add-note,
+  .auth-form .btn-submit {
+    padding: 8px 16px;
+    font-size: 1rem;
+  }
+
+  .nav-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-tabs .nav-link {
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-login-btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+  }
+
+  .auth-form .btn-submit {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-note {
+    margin: 0.5rem 0;
+  }
+
+  .auth-container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .share-modal {
+    width: 240px;
+    padding: 15px;
+  }
+
+  .share-modal .btn-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .share-modal .btn {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  .share-modal input,
+  .share-modal select {
+    padding: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  .share-modal label {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
+
+  .action-icons {
+    gap: 5px;
+  }
+
+  .action-icons svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .custom-badge {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+
+  .nav-login-btn {
+    padding: 5px 14px;
+    font-size: 0.8rem;
+  }
+  
+  .alert {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .auth-form .btn-submit {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+
+  .btn-add-note,
+  .auth-form .btn-submit {
+    padding: 6px 14px;
+    font-size: 0.95rem;
+  }
+} 

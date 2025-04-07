@@ -1,18 +1,14 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
 <h1 align="center">Notes</h1>
-<!--central-->
 
 <!-- TAG NAV BAR-->
 <div class="container mt-3">
   <ul class="nav nav-tabs">
-    <!--defines an unordered (bulleted) list-->
     <li class="nav-item">
       <a class="nav-link active" href="#" onclick="filterNotes('all')">All</a>
-      <!--defines a hyperlink-->
     </li>
     {% for tag in tags %}
-    <!--retriver tags and generate nav items corresponding to each tag-->
     <li class="nav-item">
       <a class="nav-link" href="#" onclick="filterNotes('{{ tag }}')"
         >{{ tag }}</a
@@ -25,142 +21,125 @@
 <!-- notes list-->
 <div class="container mt-3">
   <div class="row" id="notes-container">
-    <!--row used to hold column elements, add if for elements-->
     {% for note in notes %}
     <div
       class="col-md-4 col-sm-6 mb-4 note-card"
       data-tag="{{ note.tag if note.tag|length > 0 else 'untagged' }}"
     >
-      <!--mediumdevice 3（1/3width） col, smalldevice 2（1/2width） col-->
       <div class="card custom-note">
         <div class="action-icons">
-          <div class="action-icons">
-            <!-- ✏️ 编辑按钮（作者 或 被授权编辑） -->
-            <a
-              href="#"
-              onclick="showEditForm('{{ note.id }}', '{{ note.title }}', '{{ note.description }}', '{{ note.tag }}')"
-              {%
-              if
-              not
-              (note.is_owner
-              or
-              note.can_edit)
-              %}style="display: none;"
-              {%
-              endif
-              %}
+          <!-- Edit button -->
+          <a
+            href="#"
+            onclick="showEditForm('{{ note.id }}', '{{ note.title }}', '{{ note.description }}', '{{ note.tag }}')"
+            {%
+            if
+            not
+            (note.is_owner
+            or
+            note.can_edit)
+            %}style="display: none"
+            {%
+            endif
+            %}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="icon-lg"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="icon-lg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 
-                  4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
-                />
-              </svg>
-            </a>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+              />
+            </svg>
+          </a>
 
-            <!-- 🗑️ 删除按钮（只能作者） -->
-            <a
-              href="#"
-              onClick="deleteNote('{{ note.id }}')"
-              {%
-              if
-              not
-              note.is_owner
-              %}style="display: none;"
-              {%
-              endif
-              %}
+          <!-- Delete button -->
+          <a
+            href="#"
+            onClick="deleteNote('{{ note.id }}')"
+            {%
+            if
+            not
+            note.is_owner
+            %}style="display: none"
+            {%
+            endif
+            %}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="icon-lg"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="icon-lg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 
-                  1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 
-                  2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 
-                  5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 
-                  .562c.34-.059.68-.114 1.022-.165"
-                />
-              </svg>
-            </a>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165"
+              />
+            </svg>
+          </a>
 
-            <!-- 📤 分享按钮（只能作者） -->
-            <a
-              href="#"
-              onclick="showShareForm({{ note.id }})"
-              {%
-              if
-              not
-              note.is_owner
-              %}style="display: none;"
-              {%
-              endif
-              %}
+          <!-- Share button -->
+          <a
+            href="#"
+            onclick="showShareForm({{ note.id }})"
+            {%
+            if
+            not
+            note.is_owner
+            %}style="display: none"
+            {%
+            endif
+            %}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="icon-lg"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="icon-lg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.75 2.25a.75.75 0 0 0 0 1.5h3.19l-5.22 
-                  5.22a.75.75 0 1 0 1.06 1.06l5.22-5.22v3.19a.75.75 0 0 
-                  0 1.5 0V2.25h-5.75Zm-1.5 5.25a6.75 6.75 0 1 0 
-                  4.5 6.292.75.75 0 0 0-1.5-.084 5.25 5.25 0 1 
-                  1-1.964-4.047.75.75 0 0 0 .964-1.148 
-                  6.738 6.738 0 0 0-2.5-.961Z"
-                />
-              </svg>
-            </a>
-          </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 2.25a.75.75 0 0 0 0 1.5h3.19l-5.22 5.22a.75.75 0 1 0 1.06 1.06l5.22-5.22v3.19a.75.75 0 0 0 1.5 0V2.25h-5.75Zm-1.5 5.25a6.75 6.75 0 1 0 4.5 6.292.75.75 0 0 0-1.5-.084 5.25 5.25 0 1 1-1.964-4.047.75.75 0 0 0 .964-1.148 6.738 6.738 0 0 0-2.5-.961Z"
+              />
+            </svg>
+          </a>
         </div>
 
         <div class="card-body">
           <span
             class="badge badge-pill custom-badge"
-            style="background-color: {{ note.tag_color }}; "
+            style="background-color: {{ note.tag_color }}"
             >{{ note.tag }}</span
           >
-          <!--tag appearance-->
-
           <h5 class="card-title">{{note.title}}</h5>
           <p class="card-text">
-            <span class="short-text" id="short-{{ note.id }}"
-              >{{ note.description[:60] }}{% if note.description|length > 60
+            <span class="short-text" id="short-{{ note.id }}">
+              {{ note.description[:60] }}{% if note.description|length > 60
               %}...
               <a href="#" onclick="showFullText('{{ note.id }}')">[more...]</a
-              >{% endif %}</span
-            >
+              >{% endif %}
+            </span>
             <span
               class="full-text"
               id="full-{{ note.id }}"
               style="display: none"
-              >{{ note.description }}
-              <a href="#" onclick="showShortText('{{ note.id }}')"
-                >[less...]</a
-              ></span
             >
+              {{ note.description }}
+              <a href="#" onclick="showShortText('{{ note.id }}')">[less...]</a>
+            </span>
           </p>
         </div>
       </div>
@@ -168,9 +147,8 @@
     {% endfor %}
   </div>
 
-  <!--add note button -->
+  <!-- Add note button -->
   <div class="text-center mb-4">
-    <!--text-center make btn in the middle-->
     <button
       id="add-note-btn"
       class="btn btn-success mb-3 btn-add-note"
@@ -180,14 +158,11 @@
     </button>
   </div>
 
-  <!--add note form -->
+  <!-- Add note form -->
   <div id="noteForm" style="display: none">
-    <!--Hide the form in the initial state through css -->
     <form method="POST" action="/">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
       <div class="form-group">
-        <!--title input box-->
         <input
           type="text"
           name="title"
@@ -197,7 +172,6 @@
         />
       </div>
       <div class="form-group">
-        <!--description box-->
         <textarea
           name="description"
           class="form-control custom-textarea mb-3"
@@ -207,7 +181,6 @@
         ></textarea>
       </div>
       <div class="form-group">
-        <!--tag box-->
         <input
           type="text"
           name="tag"
@@ -216,9 +189,8 @@
           list="tag-list"
         />
         <datalist id="tag-list">
-          <!--define list of option-->
           {% for tag in tags %}
-          <option value="{{tag}}">{{tag}}</option>
+          <option value="{{ tag }}">{{ tag }}</option>
           {% endfor %}
         </datalist>
       </div>
@@ -230,7 +202,7 @@
     </form>
   </div>
 
-  <!--edit note form -->
+  <!-- Edit note form -->
   <div id="editForm" style="display: none">
     <form method="POST" action="/edit-note">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -279,22 +251,7 @@
   </div>
 
   <!-- Share Form Modal -->
-  <div
-    id="shareFormModal"
-    class="modal"
-    style="
-      display: none;
-      position: fixed;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fffacd;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      z-index: 9999;
-    "
-  >
+  <div id="shareFormModal" class="modal share-modal">
     <form method="POST" id="shareForm" action="/share-note/">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <input type="hidden" name="note_id" id="share-note-id" />
@@ -322,13 +279,12 @@
     </form>
   </div>
 </div>
-
 {% endblock %} {% block javascript %}
 <script>
   function showAddForm() {
-    const addForm = document.getElementById("noteForm"); //Get the DOM element with ID noteForm and assign it to the constant addForm
-    const editForm = document.getElementById("editForm"); //get the dom element with id editform and assign it to the constant editform
-    const addNoteBtn = document.getElementById("add-note-btn"); //get the dom element with id addnotebtm and assign it to the constant addnotebtn
+    const addForm = document.getElementById("noteForm");
+    const editForm = document.getElementById("editForm");
+    const addNoteBtn = document.getElementById("add-note-btn");
 
     addForm.style.display = "block";
     editForm.style.display = "none";
@@ -340,7 +296,6 @@
     const editForm = document.getElementById("editForm");
     const addNoteBtn = document.getElementById("add-note-btn");
 
-    //assign the parameter values ​​passed to the function to the corresponding input fields in the edit form
     document.getElementById("edit-note-id").value = id;
     document.getElementById("edit-note-title").value = title;
     document.getElementById("edit-note-description").value = description;
@@ -372,29 +327,22 @@
   }
 
   function filterNotes(tag) {
-    const normalizedTag = tag.trim().toLowerCase(); // 💡统一小写
+    const normalizedTag = tag.trim().toLowerCase();
     const notes = document.getElementsByClassName("note-card");
 
     for (let i = 0; i < notes.length; i++) {
       const noteTag = (notes[i].getAttribute("data-tag") || "")
         .trim()
-        .toLowerCase(); // 💡normalize tag
-
-      if (normalizedTag === "all" || noteTag === normalizedTag) {
-        notes[i].style.display = "block";
-      } else {
-        notes[i].style.display = "none";
-      }
+        .toLowerCase();
+      notes[i].style.display =
+        normalizedTag === "all" || noteTag === normalizedTag ? "block" : "none";
     }
   }
 
   function showShareForm(noteId) {
     const modal = document.getElementById("shareFormModal");
     document.getElementById("share-note-id").value = noteId;
-
-    // 设置 action 动态为 /share-note/<noteId>
     document.getElementById("shareForm").action = `/share-note/${noteId}`;
-
     modal.style.display = "block";
   }
 
@@ -403,17 +351,13 @@
     modal.style.display = "none";
   }
 
-  //ensure that all DOM elements have been parsed and can be accessed and manipulated by JavaScript
   document.addEventListener("DOMContentLoaded", function () {
-    const filterLinks = document.querySelectorAll(".nav-link"); //returns all elements matching the specified CSS selector. These elements are returned as NodeList objects
+    const filterLinks = document.querySelectorAll(".nav-link");
     filterLinks.forEach(function (link) {
-      //add a click event listener to each nav-link
       link.addEventListener("click", function () {
-        const tag = this.textContent.trim().toLowerCase(); //get the text content of the clicked nav-link element, remove the leading and trailing whitespace characters, and then assign it to the tag variable
+        const tag = this.textContent.trim().toLowerCase();
         filterNotes(tag);
-        filterLinks.forEach(function (link) {
-          link.classList.remove("active");
-        });
+        filterLinks.forEach((link) => link.classList.remove("active"));
         this.classList.add("active");
       });
     });
